@@ -1,43 +1,55 @@
-import React from 'react'; // <-- Add this line
-import { Button, Frog, TextInput } from 'frog';
+import React, { useState } from 'react';
+import { render } from 'react-dom';
 
-export const app = new Frog({ title: 'Math Quiz Frame' });
+const MathFrame: React.FC = () => {
+  const [userInput, setUserInput] = useState<string>(''); // Track user input
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null); // null indicates no submission yet
+  const [mathQuestion, setMathQuestion] = useState<{ question: string; answer: number }>({
+    question: '2 + 2 = ?',
+    answer: 4,
+  });
 
-const randomQuestion = () => {
-  const a = Math.floor(Math.random() * 10) + 1;
-  const b = Math.floor(Math.random() * 10) + 1;
-  return { question: `${a} + ${b} = ?`, answer: a + b };
+  const handleSubmit = () => {
+    const parsedInput = parseInt(userInput, 10);
+    if (!isNaN(parsedInput)) {
+      setIsCorrect(parsedInput === mathQuestion.answer);
+    } else {
+      setIsCorrect(false); // If input is not a number, consider it wrong
+    }
+  };
+
+  const handleTryAgain = () => {
+    // Reset state for a new attempt
+    setUserInput('');
+    setIsCorrect(null);
+    setMathQuestion({
+      question: '3 + 5 = ?',
+      answer: 8,
+    });
+  };
+
+  return (
+    <div style={{ backgroundColor: 'black', color: 'white', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+      {isCorrect === null ? (
+        <>
+          <h1>{mathQuestion.question}</h1>
+          <input
+            type="text"
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
+            placeholder="Enter your answer"
+            style={{ padding: '10px', marginBottom: '10px' }}
+          />
+          <button onClick={handleSubmit} style={{ padding: '10px 20px' }}>Submit</button>
+        </>
+      ) : (
+        <>
+          <h1>{isCorrect ? 'Correct!' : 'Incorrect!'}</h1>
+          <button onClick={handleTryAgain} style={{ padding: '10px 20px' }}>Try Again</button>
+        </>
+      )}
+    </div>
+  );
 };
 
-let currentQuestion = randomQuestion();
-
-app.frame('/', (c) => {
-  const { inputText, status } = c;
-
-  const isCorrect = inputText == currentQuestion.answer;
-
-  if (status === 'initial') {
-    return c.res({
-      image: (
-        <div style={{ color: 'white', backgroundColor: 'black', display: 'flex', fontSize: 30, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-          <p>{currentQuestion.question}</p>
-        </div>
-      ),
-      intents: [
-        <TextInput placeholder="Your answer" />,
-        <Button value="submit">Submit</Button>,
-      ]
-    });
-  }
-
-  return c.res({
-    image: (
-      <div style={{ color: 'white', backgroundColor: 'black', display: 'flex', fontSize: 30, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-        <p>{isCorrect ? 'Correct!' : 'Incorrect!'}</p>
-      </div>
-    ),
-    intents: [
-      <Button action="/">Try Again</Button>,
-    ]
-  });
-});
+render(<MathFrame />, document.getElementById('root'));
