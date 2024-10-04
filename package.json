@@ -12,7 +12,9 @@
   "license": "ISC",
   "dependencies": {
     "frog": "^0.17.4",
-    "hono": "^4.6.3"
+    "hono": "^4.6.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "typescript": "latest"
