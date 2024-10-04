@@ -1,0 +1,20 @@
+{
+  "name": "farcaster-math-frame",
+  "version": "1.0.0",
+  "description": "Simple Farcaster Math Quiz Frame",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "frog dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "frog": "^0.17.4",
+    "hono": "^4.6.3"
+  },
+  "devDependencies": {
+    "typescript": "latest"
+  }
+}
